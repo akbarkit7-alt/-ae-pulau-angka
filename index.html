@@ -3,26 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Petualangan Pulau Angka — Akbar Eduprintable</title>
+  <title>AE Pulau Angka — Game Petualangan Berhitung | Akbar Eduprintable</title>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-sky: #e0f7fa;
-      --bg-grad-1: #a8edea;
-      --bg-grad-2: #fed6e3;
-      --primary: #ff7b54;
-      --primary-dark: #e05a33;
-      --secondary: #4ea8de;
-      --secondary-dark: #2b7bb0;
-      --success: #4cc970;
-      --success-dark: #33a353;
-      --warning: #ffb703;
-      --danger: #ff595e;
-      --text-main: #2b2d42;
-      --text-muted: #6c757d;
-      --card-bg: #ffffff;
-      --shadow: 0 10px 25px rgba(43, 45, 66, 0.12);
-      --radius: 22px;
+      --primary: #ff6b35;
+      --primary-dark: #d94e1f;
+      --secondary: #1d8cf8;
+      --secondary-dark: #0f66bd;
+      --success: #2ec4b6;
+      --success-dark: #1c968a;
+      --gold: #ffbe0b;
+      --gold-dark: #d49a00;
+      --danger: #ef476f;
+      --ink: #1e293b;
+      --muted: #64748b;
+      --radius: 24px;
     }
 
     * {
@@ -35,579 +31,561 @@
       margin: 0;
       padding: 0;
       font-family: 'Fredoka', 'Nunito', sans-serif;
-      background: linear-gradient(135deg, #c2e9fb 0%, #a1c4fd 50%, #fbc2eb 100%);
+      background: radial-gradient(circle at top, #72efdd 0%, #48bfe3 45%, #5e60ce 100%);
       min-height: 100vh;
-      color: var(--text-main);
+      color: var(--ink);
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
-    .app-container {
+    .game-shell {
       width: 100%;
-      max-width: 820px;
+      max-width: 880px;
       min-height: 100vh;
-      background: rgba(255, 255, 255, 0.94);
-      backdrop-filter: blur(10px);
+      background: #f8fafc;
       display: flex;
       flex-direction: column;
       position: relative;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
-    @media (min-width: 840px) {
-      .app-container {
+    @media (min-width: 900px) {
+      .game-shell {
         min-height: 92vh;
-        margin: 20px;
-        border-radius: 30px;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.18);
-        border: 5px solid #ffffff;
+        margin: 18px;
+        border-radius: 32px;
+        box-shadow: 0 25px 60px rgba(15, 23, 42, 0.35);
+        border: 6px solid rgba(255, 255, 255, 0.9);
       }
     }
 
-    /* TOP BAR */
-    .top-bar {
+    /* HUD TOP BAR */
+    .hud-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 18px;
-      background: #ffffff;
-      border-bottom: 3px solid #f0f4f8;
-      z-index: 10;
-      flex-wrap: wrap;
+      background: linear-gradient(90deg, #ffffff 0%, #f1f5f9 100%);
+      border-bottom: 3px solid #e2e8f0;
       gap: 10px;
+      flex-wrap: wrap;
+      z-index: 20;
     }
 
-    .brand {
+    .brand-group {
       display: flex;
       align-items: center;
       gap: 10px;
       cursor: pointer;
     }
 
-    .brand-logo-mono {
+    .ae-badge {
       width: 44px;
       height: 44px;
       background: #ffffff;
-      border: 2px solid #1b1b1b;
-      border-radius: 12px;
+      border: 2.5px solid #0f172a;
+      border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 4px;
+      box-shadow: 0 3px 0 #0f172a;
       flex-shrink: 0;
     }
 
-    .brand-title-wrap {
+    .brand-text {
       display: flex;
       flex-direction: column;
-      line-height: 1.15;
+      line-height: 1.1;
     }
 
-    .brand-main {
+    .brand-name {
       font-size: 1.15rem;
       font-weight: 700;
       color: var(--primary-dark);
     }
 
-    .brand-sub {
-      font-size: 0.72rem;
+    .brand-studio {
+      font-size: 0.7rem;
       font-weight: 800;
-      letter-spacing: 0.6px;
-      color: #2b2d42;
+      letter-spacing: 0.7px;
+      color: #334155;
       text-transform: uppercase;
     }
 
-    .stats-pill-group {
+    .hud-meters {
       display: flex;
       align-items: center;
       gap: 8px;
       flex-wrap: wrap;
     }
 
-    .pill {
-      background: #f8f9fa;
-      border: 2px solid #e9ecef;
-      padding: 6px 12px;
-      border-radius: 50px;
+    .meter {
+      background: #fff;
+      border: 2.5px solid #cbd5e1;
+      border-radius: 999px;
+      padding: 5px 12px;
       font-weight: 700;
       font-size: 0.95rem;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
+      box-shadow: 0 3px 0 #e2e8f0;
     }
 
-    .pill.coin { background: #fff9db; border-color: #fcc419; color: #b88100; }
-    .pill.star { background: #e7f5ff; border-color: #74c0fc; color: #1864ab; }
+    .meter.coins { background: #fffbeb; border-color: var(--gold); color: #92400e; }
+    .meter.stars { background: #eff6ff; border-color: #60a5fa; color: #1e40af; }
+    .meter.streak { background: #fff1f2; border-color: #fb7185; color: #be123c; }
 
-    .icon-btn {
-      background: #f1f3f5;
-      border: none;
+    .hud-btn {
+      background: #ffffff;
+      border: 2.5px solid #cbd5e1;
       border-radius: 14px;
-      padding: 8px 12px;
-      font-size: 1.05rem;
-      cursor: pointer;
+      padding: 7px 11px;
       font-family: inherit;
       font-weight: 700;
-      transition: transform 0.15s, background 0.15s;
+      font-size: 0.92rem;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #cbd5e1;
+      transition: transform 0.1s;
+      text-decoration: none;
+      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
 
-    .icon-btn:active { transform: scale(0.93); }
-    .icon-btn:hover { background: #e9ecef; }
+    .hud-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #cbd5e1; }
 
     /* SCREENS */
     .screen {
       display: none;
-      padding: 20px;
       flex: 1;
       flex-direction: column;
-      animation: fadeIn 0.3s ease;
+      padding: 18px 20px 24px;
+      overflow-y: auto;
+      animation: popIn 0.25s ease;
     }
 
     .screen.active { display: flex; }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     /* BUTTONS */
     .btn {
       border: none;
       border-radius: 18px;
-      padding: 14px 24px;
+      padding: 13px 22px;
       font-family: 'Fredoka', sans-serif;
-      font-size: 1.15rem;
+      font-size: 1.08rem;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.15s ease;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      box-shadow: 0 5px 0 rgba(0,0,0,0.15);
+      transition: transform 0.12s;
+      text-decoration: none;
     }
 
-    .btn:active {
-      transform: translateY(4px);
-      box-shadow: 0 1px 0 rgba(0,0,0,0.15);
-    }
-
+    .btn:active { transform: translateY(4px); }
     .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 5px 0 var(--primary-dark); }
     .btn-secondary { background: var(--secondary); color: #fff; box-shadow: 0 5px 0 var(--secondary-dark); }
     .btn-success { background: var(--success); color: #fff; box-shadow: 0 5px 0 var(--success-dark); }
-    .btn-warning { background: var(--warning); color: #2b2d42; box-shadow: 0 5px 0 #d99b00; }
-    .btn-light { background: #f1f3f5; color: var(--text-main); box-shadow: 0 4px 0 #ced4da; }
+    .btn-gold { background: var(--gold); color: #1e293b; box-shadow: 0 5px 0 var(--gold-dark); }
+    .btn-soft { background: #e2e8f0; color: #1e293b; box-shadow: 0 4px 0 #94a3b8; }
 
-    /* WELCOME & PROFILE */
-    .hero-box {
-      text-align: center;
-      background: linear-gradient(135deg, #fff9db 0%, #ffe8cc 100%);
-      border: 3px solid #ffd43b;
-      border-radius: var(--radius);
-      padding: 24px 18px;
-      margin-bottom: 20px;
-    }
-
-    .mascot-display {
-      font-size: 4.5rem;
-      line-height: 1.1;
-      margin-bottom: 8px;
-      display: inline-block;
-      animation: bounce 2.5s infinite ease-in-out;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    .input-name-box {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      max-width: 420px;
-      margin: 14px auto 0;
-    }
-
-    .input-name-box input {
-      flex: 1;
-      padding: 12px 16px;
-      border-radius: 16px;
-      border: 3px solid #ffc078;
-      font-family: inherit;
-      font-size: 1.1rem;
-      font-weight: 700;
-      outline: none;
-    }
-
-    /* JENJANG CARDS */
-    .section-title {
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin: 8px 0 14px;
+    /* TITLE / WORLD LOBBY */
+    .world-banner {
+      background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 55%, #fde047 100%);
+      border-radius: 26px;
+      padding: 20px;
+      color: #ffffff;
+      text-shadow: 0 2px 6px rgba(15, 23, 42, 0.25);
+      border: 4px solid #ffffff;
+      box-shadow: 0 12px 24px rgba(14, 165, 233, 0.25);
       display: flex;
       align-items: center;
-      gap: 8px;
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-bottom: 20px;
-    }
-
-    .level-card {
-      background: #ffffff;
-      border: 3px solid #e9ecef;
-      border-radius: var(--radius);
-      padding: 20px 16px;
-      text-align: center;
-      cursor: pointer;
-      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-      position: relative;
-    }
-
-    .level-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow);
-    }
-
-    .level-card.paud { border-color: #63e6be; background: linear-gradient(to bottom, #ffffff, #e6fcf5); }
-    .level-card.tk { border-color: #74c0fc; background: linear-gradient(to bottom, #ffffff, #e7f5ff); }
-    .level-card.sd { border-color: #ffa94d; background: linear-gradient(to bottom, #ffffff, #fff4e6); }
-
-    .level-badge {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 50px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .paud .level-badge { background: #c3fae8; color: #087f5b; }
-    .tk .level-badge { background: #d0ebff; color: #1864ab; }
-    .sd .level-badge { background: #ffe8cc; color: #d9480f; }
-
-    .level-card h3 { margin: 6px 0; font-size: 1.35rem; }
-    .level-card p { margin: 0; font-size: 0.92rem; color: var(--text-muted); line-height: 1.4; }
-
-    /* MODE SELECTION */
-    .mode-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .mode-card {
-      background: #fff;
-      border: 3px solid #dee2e6;
-      border-radius: 20px;
-      padding: 16px 12px;
-      text-align: center;
-      cursor: pointer;
-      transition: 0.15s;
-    }
-
-    .mode-card:hover {
-      border-color: var(--secondary);
-      background: #f8f9fa;
-      transform: scale(1.02);
-    }
-
-    .mode-icon { font-size: 2.4rem; margin-bottom: 6px; }
-    .mode-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 4px; }
-    .mode-desc { font-size: 0.82rem; color: var(--text-muted); }
-
-    /* GAMEPLAY AREA */
-    .game-header {
-      display: flex;
       justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .hero-avatar-box {
+      display: flex;
       align-items: center;
-      margin-bottom: 14px;
+      gap: 14px;
+    }
+
+    .hero-sprite {
+      font-size: 3.8rem;
+      background: rgba(255, 255, 255, 0.92);
+      width: 82px;
+      height: 82px;
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid #ffffff;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+      animation: floatSprite 2.6s ease-in-out infinite;
+    }
+
+    @keyframes floatSprite {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
+    }
+
+    .profile-switcher {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      background: rgba(255, 255, 255, 0.92);
+      padding: 10px 14px;
+      border-radius: 18px;
+      color: var(--ink);
+      text-shadow: none;
+    }
+
+    .profile-chip {
+      padding: 6px 12px;
+      border-radius: 12px;
+      border: 2px solid #cbd5e1;
+      background: #f8fafc;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .profile-chip.active {
+      background: var(--gold);
+      border-color: var(--gold-dark);
+    }
+
+    /* JENJANG TABS */
+    .jenjang-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .jenjang-tab {
+      background: #ffffff;
+      border: 3px solid #cbd5e1;
+      border-bottom-width: 6px;
+      border-radius: 20px;
+      padding: 12px 10px;
+      text-align: center;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 700;
+      transition: all 0.15s;
+    }
+
+    .jenjang-tab.active.paud { background: #dcfce7; border-color: #22c55e; color: #14532d; }
+    .jenjang-tab.active.tk { background: #dbeafe; border-color: #3b82f6; color: #1e3a8a; }
+    .jenjang-tab.active.sd { background: #ffedd5; border-color: #f97316; color: #7c2d12; }
+
+    /* MAP ZONES */
+    .map-canvas {
+      background: linear-gradient(180deg, #bae6fd 0%, #dcfce7 55%, #fef08a 100%);
+      border: 4px solid #ffffff;
+      border-radius: 28px;
+      padding: 20px 16px;
+      box-shadow: inset 0 4px 16px rgba(255,255,255,0.7), 0 10px 24px rgba(15,23,42,0.1);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .zone-node {
+      background: #ffffff;
+      border: 3.5px solid #38bdf8;
+      border-bottom-width: 7px;
+      border-radius: 24px;
+      padding: 16px 14px;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.15s;
+    }
+
+    .zone-node:hover { transform: translateY(-4px); }
+    .zone-node.cleared { border-color: #22c55e; background: #f0fdf4; }
+
+    .zone-step {
+      position: absolute;
+      top: -12px;
+      left: 14px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 2px solid #fff;
+    }
+
+    .zone-icon { font-size: 2.6rem; margin: 6px 0 4px; }
+    .zone-title { font-size: 1.08rem; font-weight: 700; margin-bottom: 4px; }
+    .zone-sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 8px; }
+    .zone-stars { font-size: 1rem; letter-spacing: 2px; }
+
+    /* GAMEPLAY ARENA */
+    .arena-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 10px;
+      margin-bottom: 14px;
       flex-wrap: wrap;
     }
 
-    .progress-wrap {
+    .hearts-box {
+      background: #fff1f2;
+      border: 2px solid #fda4af;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .q-progress-track {
       flex: 1;
       min-width: 120px;
       height: 18px;
-      background: #e9ecef;
-      border-radius: 50px;
+      background: #e2e8f0;
+      border-radius: 999px;
       overflow: hidden;
-      border: 2px solid #dee2e6;
+      border: 2px solid #cbd5e1;
     }
 
-    .progress-bar {
+    .q-progress-fill {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #51cf66, #2b8a3e);
+      background: linear-gradient(90deg, #22c55e, #16a34a);
       transition: width 0.3s ease;
     }
 
-    .question-box {
-      background: #ffffff;
-      border: 4px solid #74c0fc;
-      border-radius: 26px;
-      padding: 22px 18px;
+    .stage-scene {
+      background: linear-gradient(180deg, #e0f2fe 0%, #ffffff 45%, #fef9c3 100%);
+      border: 4px solid #38bdf8;
+      border-radius: 28px;
+      padding: 18px;
       text-align: center;
-      box-shadow: var(--shadow);
-      margin-bottom: 18px;
-      position: relative;
+      box-shadow: 0 12px 25px rgba(15, 23, 42, 0.1);
+      margin-bottom: 16px;
     }
 
-    .topic-tag {
-      display: inline-block;
-      background: #e7f5ff;
-      color: #1971c2;
-      padding: 4px 14px;
-      border-radius: 50px;
-      font-size: 0.9rem;
-      font-weight: 700;
+    .character-stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
       margin-bottom: 10px;
     }
 
-    .visual-stage {
+    .actor-sprite {
+      font-size: 3.1rem;
+      transition: transform 0.25s ease;
+      display: inline-block;
+    }
+
+    .actor-sprite.happy { transform: scale(1.22) rotate(-6deg); }
+    .actor-sprite.sad { transform: scale(0.92); filter: grayscale(0.4); }
+
+    .speech-bubble {
+      background: #ffffff;
+      border: 2.5px solid #94a3b8;
+      border-radius: 18px;
+      padding: 8px 14px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #1e293b;
+      max-width: 360px;
+      text-align: left;
+    }
+
+    .objects-tray {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      align-items: center;
       gap: 10px;
       margin: 12px 0;
-      min-height: 60px;
     }
 
-    .visual-group {
-      background: #f8f9fa;
-      border: 2px dashed #adb5bd;
-      border-radius: 16px;
+    .basket-card {
+      background: #ffffff;
+      border: 2.5px dashed #64748b;
+      border-radius: 18px;
       padding: 10px 14px;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 6px;
-      max-width: 300px;
+      max-width: 280px;
     }
 
-    .visual-item {
+    .tap-item {
       font-size: 2rem;
       cursor: pointer;
       transition: transform 0.15s;
-      display: inline-block;
     }
 
-    .visual-item.counted {
+    .tap-item.active-tap {
       transform: scale(1.25);
-      filter: drop-shadow(0 0 6px #fcc419);
+      filter: drop-shadow(0 0 6px #f59e0b);
     }
 
-    .question-text {
-      font-size: 2.3rem;
+    .prompt-big {
+      font-size: 2.2rem;
       font-weight: 700;
-      color: var(--text-main);
-      margin: 10px 0;
-      line-height: 1.3;
+      margin: 8px 0;
+      color: #0f172a;
     }
 
-    .question-story {
-      font-size: 1.25rem;
+    .prompt-story {
+      font-size: 1.18rem;
       font-weight: 600;
-      color: #343a40;
-      background: #fff9db;
-      padding: 14px;
-      border-radius: 16px;
-      margin: 10px 0;
-      line-height: 1.5;
+      background: #fffbeb;
+      border: 2px solid #fde68a;
+      border-radius: 18px;
+      padding: 12px 14px;
+      margin: 8px auto;
+      max-width: 620px;
+      line-height: 1.45;
     }
 
-    .speak-btn {
-      background: #e7f5ff;
-      border: 2px solid #74c0fc;
-      color: #1864ab;
-      border-radius: 50px;
-      padding: 6px 14px;
-      font-family: inherit;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 0.9rem;
-      margin-top: 6px;
-    }
-
-    /* OPTIONS GRID */
-    .options-grid {
+    .choices-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-      margin-bottom: 14px;
+      gap: 12px;
+      margin-bottom: 12px;
     }
 
-    .option-btn {
+    .choice-btn {
       background: #ffffff;
-      border: 3px solid #ced4da;
+      border: 3px solid #cbd5e1;
       border-bottom-width: 6px;
       border-radius: 20px;
-      padding: 18px 12px;
+      padding: 16px 10px;
       font-family: 'Fredoka', sans-serif;
-      font-size: 1.8rem;
+      font-size: 1.7rem;
       font-weight: 700;
-      color: var(--text-main);
+      color: #1e293b;
       cursor: pointer;
       transition: all 0.12s;
     }
 
-    .option-btn:hover:not(:disabled) {
+    .choice-btn:hover:not(:disabled) {
       border-color: var(--secondary);
-      background: #f1f8ff;
+      background: #eff6ff;
       transform: translateY(-2px);
     }
 
-    .option-btn:active:not(:disabled) {
-      transform: translateY(3px);
-      border-bottom-width: 3px;
+    .choice-btn.right {
+      background: #dcfce7 !important;
+      border-color: #16a34a !important;
+      color: #14532d !important;
     }
 
-    .option-btn.correct {
-      background: #d3f9d8 !important;
-      border-color: #37b24d !important;
-      color: #2b8a3e !important;
+    .choice-btn.wrong {
+      background: #ffe4e6 !important;
+      border-color: #e11d48 !important;
+      color: #881337 !important;
     }
 
-    .option-btn.wrong {
-      background: #ffe3e3 !important;
-      border-color: #f03e3e !important;
-      color: #c92a2a !important;
-      animation: shake 0.35s;
-    }
-
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-6px); }
-      75% { transform: translateX(6px); }
-    }
-
-    /* FEEDBACK & SCAFFOLDING */
-    .feedback-banner {
-      border-radius: 18px;
-      padding: 14px 18px;
-      font-weight: 700;
-      font-size: 1.05rem;
+    .feedback-bar {
       display: none;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
+      padding: 12px 16px;
+      border-radius: 18px;
+      font-weight: 700;
       margin-top: auto;
     }
 
-    .feedback-banner.success {
-      display: flex;
-      background: #d3f9d8;
-      border: 2px solid #51cf66;
-      color: #2b8a3e;
-    }
+    .feedback-bar.ok { display: flex; background: #dcfce7; border: 2px solid #4ade80; color: #14532d; }
+    .feedback-bar.tip { display: flex; background: #fef9c3; border: 2px solid #facc15; color: #713f12; }
 
-    .feedback-banner.hint {
-      display: flex;
-      background: #fff3bf;
-      border: 2px solid #fcc419;
-      color: #8f5c00;
-    }
-
-    /* SHOP & REWARDS */
-    .shop-grid {
+    /* SHOP & CERTIFICATE & PARENT */
+    .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
       gap: 12px;
     }
 
-    .shop-item {
-      background: #fff;
-      border: 3px solid #e9ecef;
-      border-radius: 18px;
+    .item-card {
+      background: #ffffff;
+      border: 3px solid #e2e8f0;
+      border-radius: 20px;
       padding: 14px 10px;
       text-align: center;
     }
 
-    .shop-item.owned { border-color: #51cf66; background: #ebfbee; }
-    .shop-item.equipped { border-color: var(--primary); background: #fff4e6; }
+    .item-card.owned { border-color: #4ade80; background: #f0fdf4; }
+    .item-card.equipped { border-color: var(--primary); background: #fff7ed; }
 
-    /* PARENT DASHBOARD & CERTIFICATE */
-    .stat-table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #fff;
-      border-radius: 16px;
-      overflow: hidden;
-      margin-bottom: 18px;
-    }
-
-    .stat-table th, .stat-table td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #e9ecef;
-    }
-
-    .stat-table th { background: #f1f3f5; }
-
-    .certificate-box {
+    .cert-frame {
       background: #fffdf7;
-      border: 8px double #f59f00;
-      border-radius: 20px;
-      padding: 28px 20px;
+      border: 8px double #eab308;
+      border-radius: 22px;
+      padding: 24px 18px;
       text-align: center;
-      position: relative;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
     }
 
-    .cert-header-brand {
+    .cert-brand-pill {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      background: #ffffff;
-      border: 2px solid #1b1b1b;
-      padding: 6px 14px;
-      border-radius: 14px;
-      margin-bottom: 10px;
-    }
-
-    .cert-title {
-      font-size: 1.8rem;
-      color: #d9480f;
-      margin: 4px 0 6px;
-      letter-spacing: 1px;
-    }
-
-    .cert-name {
-      font-size: 2.1rem;
-      color: #1864ab;
-      border-bottom: 3px dashed #74c0fc;
-      display: inline-block;
-      padding: 4px 24px;
-      margin: 12px 0;
-    }
-
-    /* FOOTER BRAND */
-    .app-footer {
-      text-align: center;
-      padding: 10px 16px 14px;
-      font-size: 0.82rem;
-      color: #5c5f66;
-      background: rgba(255, 255, 255, 0.75);
-      border-top: 2px solid #f1f3f5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       gap: 8px;
+      background: #ffffff;
+      border: 2px solid #0f172a;
+      padding: 5px 12px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      margin-bottom: 8px;
     }
 
-    /* MODAL */
-    .modal-overlay {
+    .cert-student {
+      font-size: 2rem;
+      color: #0369a1;
+      border-bottom: 3px dashed #7dd3fc;
+      display: inline-block;
+      padding: 4px 22px;
+      margin: 10px 0;
+    }
+
+    .footer-bar {
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 0.8rem;
+      color: #475569;
+      background: #f1f5f9;
+      border-top: 2px solid #e2e8f0;
+    }
+
+    .footer-bar a {
+      color: var(--primary-dark);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .footer-bar a:hover { text-decoration: underline; }
+
+    .modal-bg {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.55);
+      background: rgba(15, 23, 42, 0.6);
       display: none;
       justify-content: center;
       align-items: center;
@@ -615,921 +593,865 @@
       z-index: 100;
     }
 
-    .modal-overlay.active { display: flex; }
+    .modal-bg.open { display: flex; }
 
-    .modal-card {
-      background: #fff;
+    .modal-box {
+      background: #ffffff;
       border-radius: 24px;
-      padding: 24px;
-      max-width: 400px;
+      padding: 22px;
+      max-width: 390px;
       width: 100%;
       text-align: center;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
     }
 
     @media print {
       body * { visibility: hidden; }
-      #certificatePrintArea, #certificatePrintArea * { visibility: visible; }
-      #certificatePrintArea {
-        position: fixed;
-        left: 0;
-        top: 0;
-        width: 100%;
-      }
+      #certPrint, #certPrint * { visibility: visible; }
+      #certPrint { position: fixed; inset: 0; }
     }
   </style>
 </head>
 <body>
 
-<div class="app-container">
-  <!-- TOP BAR -->
-  <header class="top-bar">
-    <div class="brand" onclick="goHome()">
-      <div class="brand-logo-mono" aria-label="Logo Monokrom AE Akbar Eduprintable">
-        <!-- SVG Logo Monokrom AE -->
-        <svg viewBox="0 0 120 120" width="34" height="34" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M22 86 A44 44 0 1 1 98 86" stroke="#141414" stroke-width="6.5" stroke-linecap="round"/>
-          <path d="M60 14 L67 34 L63 40 L57 40 L53 34 Z" fill="#141414"/>
+<div class="game-shell">
+  <!-- TOP HUD -->
+  <header class="hud-bar">
+    <div class="brand-group" onclick="goScreen('screenMap')">
+      <div class="ae-badge" title="Akbar Eduprintable">
+        <!-- Logo Monokrom AE -->
+        <svg viewBox="0 0 120 120" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 86 A44 44 0 1 1 98 86" stroke="#0f172a" stroke-width="6.5" stroke-linecap="round"/>
+          <path d="M60 14 L67 34 L63 40 L57 40 L53 34 Z" fill="#0f172a"/>
           <rect x="58.5" y="24" width="3" height="8" rx="1" fill="#ffffff"/>
-          <path d="M31 86 L49 38 L57 38 L73 86 L63 86 L59 73 L45 73 L40 86 Z" fill="#141414"/>
+          <path d="M31 86 L49 38 L57 38 L73 86 L63 86 L59 73 L45 73 L40 86 Z" fill="#0f172a"/>
           <polygon points="48,65 56,65 52,51" fill="#ffffff"/>
-          <path d="M53 66 C62 66, 66 56, 78 56 L92 56 L92 64 L78 64 C70 64, 66 73, 55 73 Z" fill="#141414"/>
-          <rect x="74" y="38" width="18" height="5" rx="2" fill="#141414"/>
-          <rect x="74" y="45" width="14" height="4" rx="2" fill="#141414"/>
-          <rect x="74" y="72" width="18" height="4.5" rx="2" fill="#141414"/>
-          <rect x="74" y="79" width="15" height="4.5" rx="2" fill="#141414"/>
+          <path d="M53 66 C62 66, 66 56, 78 56 L92 56 L92 64 L78 64 C70 64, 66 73, 55 73 Z" fill="#0f172a"/>
+          <rect x="74" y="38" width="18" height="5" rx="2" fill="#0f172a"/>
+          <rect x="74" y="45" width="14" height="4" rx="2" fill="#0f172a"/>
+          <rect x="74" y="72" width="18" height="4.5" rx="2" fill="#0f172a"/>
+          <rect x="74" y="79" width="15" height="4.5" rx="2" fill="#0f172a"/>
         </svg>
       </div>
-      <div class="brand-title-wrap">
-        <span class="brand-main">Pulau Angka</span>
-        <span class="brand-sub">Akbar Eduprintable</span>
+      <div class="brand-text">
+        <span class="brand-name">AE Pulau Angka</span>
+        <span class="brand-studio">Akbar Eduprintable</span>
       </div>
     </div>
 
-    <div class="stats-pill-group">
-      <div class="pill coin">🪙 <span id="coinCount">0</span></div>
-      <div class="pill star">⭐ <span id="starCount">0</span></div>
-      <button class="icon-btn" id="soundToggleBtn" onclick="toggleSound()" title="Suara">🔊</button>
-      <button class="icon-btn" onclick="openParentGate()" title="Area Orang Tua">👨‍👩‍👧 Ortu</button>
+    <div class="hud-meters">
+      <div class="meter streak">🔥 <span id="hudCombo">0</span></div>
+      <div class="meter coins">🪙 <span id="hudCoins">0</span></div>
+      <div class="meter stars">⭐ <span id="hudStars">0</span></div>
+      <button class="hud-btn" id="btnSound" onclick="toggleAudio()">🔊</button>
+      <button class="hud-btn" onclick="openParentGate()">👨‍👩‍👧 Ortu</button>
     </div>
   </header>
 
-  <!-- SCREEN 1: HOME / JENJANG -->
-  <main id="screenHome" class="screen active">
-    <div class="hero-box">
-      <div class="mascot-display" id="heroMascot">🦁</div>
-      <h2 style="margin: 4px 0; font-size: 1.6rem;">Halo, <span id="displayChildName">Petualang Cilik</span>! 👋</h2>
-      <p style="margin: 0; color: #5c5f66;">Pilih jenjang belajarmu hari ini dan kumpulkan bintang sebanyak-banyaknya!</p>
-      <div class="input-name-box">
-        <input type="text" id="childNameInput" placeholder="Ketik nama anak di sini..." maxlength="20" />
-        <button class="btn btn-warning" style="padding: 10px 16px; font-size: 1rem;" onclick="saveChildName()">Simpan</button>
+  <!-- SCREEN 1: WORLD MAP & PROFILE -->
+  <section id="screenMap" class="screen active">
+    <div class="world-banner">
+      <div class="hero-avatar-box">
+        <div class="hero-sprite" id="lobbySprite">🦁</div>
+        <div>
+          <div style="font-size: 0.85rem; font-weight: 800; opacity: 0.95;">PETUALANG AKTIF</div>
+          <h2 style="margin: 2px 0; font-size: 1.55rem;" id="lobbyName">Anak Hebat</h2>
+          <div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
+            <input type="text" id="editNameInput" placeholder="Ubah nama..." maxlength="18"
+                   style="padding: 6px 10px; border-radius: 10px; border: none; font-family: inherit; font-weight: 700; width: 130px;" />
+            <button class="btn btn-gold" style="padding: 6px 12px; font-size: 0.85rem; box-shadow: 0 3px 0 var(--gold-dark);" onclick="renameActiveProfile()">Simpan</button>
+          </div>
+        </div>
       </div>
+
+      <div class="profile-switcher" id="profileSwitcher"></div>
     </div>
 
-    <div class="section-title">🎯 Langkah 1: Pilih Jenjang Usia</div>
-    <div class="grid-3">
-      <div class="level-card paud" onclick="selectJenjang('PAUD')">
-        <span class="level-badge">Usia 3 – 4 Tahun</span>
-        <div style="font-size: 2.5rem;">🧸</div>
-        <h3>Jalur PAUD</h3>
-        <p>Mengenal angka 1–10, menghitung buah & hewan lucu, serta membandingkan banyak & sedikit.</p>
-      </div>
-
-      <div class="level-card tk" onclick="selectJenjang('TK')">
-        <span class="level-badge">Usia 5 – 6 Tahun</span>
-        <div style="font-size: 2.5rem;">🚀</div>
-        <h3>Jalur TK</h3>
-        <p>Penjumlahan & pengurangan 1–20 dengan bantuan gambar, urutan angka, dan simbol &lt; &gt; =.</p>
-      </div>
-
-      <div class="level-card sd" onclick="selectJenjang('SD')">
-        <span class="level-badge">Usia 7 – 12 Tahun</span>
-        <div style="font-size: 2.5rem;">🏆</div>
-        <h3>Jalur SD</h3>
-        <p>Perkalian, pembagian, operasi campuran, angka misteri, dan tantangan logika berhitung.</p>
-      </div>
+    <div class="jenjang-bar">
+      <button class="jenjang-tab paud active" id="tabPAUD" onclick="chooseJenjang('PAUD')">
+        🧸 PAUD<br><span style="font-size:0.78rem; font-weight:600;">3–4 Tahun</span>
+      </button>
+      <button class="jenjang-tab tk" id="tabTK" onclick="chooseJenjang('TK')">
+        🚀 TK<br><span style="font-size:0.78rem; font-weight:600;">5–6 Tahun</span>
+      </button>
+      <button class="jenjang-tab sd" id="tabSD" onclick="chooseJenjang('SD')">
+        🏆 SD<br><span style="font-size:0.78rem; font-weight:600;">7–12 Tahun</span>
+      </button>
     </div>
 
-    <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: auto;">
-      <button class="btn btn-secondary" onclick="showScreen('screenShop')">🎁 Toko Maskot & Hadiah</button>
-      <button class="btn btn-success" onclick="showScreen('screenCertificate')">📜 Lihat Sertifikat</button>
-    </div>
-  </main>
+    <div class="map-canvas" id="mapZonesContainer"></div>
 
-  <!-- SCREEN 2: PILIH DUNIA / MODE BERMAIN -->
-  <main id="screenModes" class="screen">
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: auto;">
+      <button class="btn btn-secondary" onclick="goScreen('screenShop')">🎒 Toko Karakter</button>
+      <button class="btn btn-success" onclick="goScreen('screenCert')">📜 Sertifikat AE</button>
+      <a class="btn btn-gold" href="https://lynk.id/akbareduprintable" target="_blank" rel="noopener noreferrer">🛍️ Toko Printable</a>
+    </div>
+  </section>
+
+  <!-- SCREEN 2: GAME ARENA -->
+  <section id="screenArena" class="screen">
+    <div class="arena-top">
+      <button class="btn btn-soft" style="padding: 8px 14px; font-size: 0.92rem;" onclick="leaveArena()">⬅ Peta</button>
+      <div class="q-progress-track">
+        <div class="q-progress-fill" id="arenaProgress"></div>
+      </div>
+      <div class="meter">📍 <span id="arenaStepText">1/10</span></div>
+      <div class="hearts-box">❤️ <span id="arenaHearts">3</span></div>
+      <div class="meter" id="arenaTimerWrap" style="display:none;">⏱️ <span id="arenaTimer">20</span>s</div>
+    </div>
+
+    <div class="stage-scene">
+      <div class="character-stage">
+        <span class="actor-sprite" id="arenaMascot">🦁</span>
+        <div class="speech-bubble" id="arenaSpeech">Ayo selesaikan misi pulau ini!</div>
+      </div>
+      <div id="arenaObjects" class="objects-tray"></div>
+      <div id="arenaPrompt"></div>
+      <button class="hud-btn" style="margin-top: 6px; background:#e0f2fe; border-color:#7dd3fc;" onclick="readAloud()">🔊 Bacakan Soal</button>
+    </div>
+
+    <div class="choices-grid" id="arenaChoices"></div>
+
+    <div class="feedback-bar" id="arenaFeedback">
+      <span id="arenaFeedbackMsg">Mantap!</span>
+      <button class="btn btn-success" style="padding: 8px 16px; font-size: 0.98rem;" onclick="advanceQuestion()">Lanjut ➡</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 3: VICTORY / FINISH -->
+  <section id="screenFinish" class="screen" style="text-align: center; justify-content: center;">
+    <div class="stage-scene" style="max-width: 520px; margin: 0 auto;">
+      <div style="font-size: 4rem;" id="finishMedal">🏆</div>
+      <h2 style="margin: 8px 0; font-size: 1.8rem;" id="finishHeading">Misi Selesai!</h2>
+      <p style="color: var(--muted); margin-bottom: 16px;" id="finishDetail">Kamu menaklukkan tantangan dengan hebat!</p>
+      <div style="display: flex; justify-content: center; gap: 14px; margin-bottom: 20px;">
+        <div class="meter stars" style="font-size: 1.1rem; padding: 8px 16px;">⭐ +<span id="finishStars">0</span></div>
+        <div class="meter coins" style="font-size: 1.1rem; padding: 8px 16px;">🪙 +<span id="finishCoins">0</span></div>
+      </div>
+      <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+        <button class="btn btn-primary" onclick="replayZone()">🔄 Main Ulang</button>
+        <button class="btn btn-secondary" onclick="goScreen('screenMap')">🗺️ Kembali ke Peta</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 4: SHOP -->
+  <section id="screenShop" class="screen">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-      <button class="btn btn-light" style="padding: 8px 14px; font-size: 0.95rem;" onclick="goHome()">⬅ Ganti Jenjang</button>
-      <span class="pill" style="background:#fff3bf; border-color:#fcc419;" id="selectedJenjangBadge">Jenjang: TK</span>
+      <button class="btn btn-soft" style="padding: 8px 14px; font-size: 0.92rem;" onclick="goScreen('screenMap')">⬅ Peta</button>
+      <h3 style="margin: 0;">🎒 Toko Teman Petualang</h3>
     </div>
+    <div class="cards-grid" id="shopCardsGrid"></div>
+  </section>
 
-    <div class="section-title">🗺️ Langkah 2: Pilih Petualangan Belajar</div>
-    <div class="mode-grid" id="modeListContainer"></div>
-  </main>
-
-  <!-- SCREEN 3: GAMEPLAY -->
-  <main id="screenGame" class="screen">
-    <div class="game-header">
-      <button class="btn btn-light" style="padding: 8px 14px; font-size: 0.95rem;" onclick="exitGame()">✖ Keluar</button>
-      <div class="progress-wrap">
-        <div class="progress-bar" id="gameProgressBar"></div>
-      </div>
-      <div class="pill">Soal <span id="qNumber">1</span>/10</div>
-      <div class="pill" id="timerPill" style="display:none;">⏱️ <span id="timerText">20</span>s</div>
-    </div>
-
-    <div class="question-box">
-      <div class="topic-tag" id="gameTopicTag">Berhitung Benda</div>
-      <div id="visualStage" class="visual-stage"></div>
-      <div id="questionContent"></div>
-      <button class="speak-btn" onclick="speakCurrentQuestion()">🔊 Dengarkan Soal</button>
-    </div>
-
-    <div class="options-grid" id="optionsGrid"></div>
-
-    <div class="feedback-banner" id="feedbackBanner">
-      <span id="feedbackText">Hebat! Jawabanmu benar!</span>
-      <button class="btn btn-success" id="nextQuestionBtn" style="padding: 8px 16px; font-size: 1rem;" onclick="nextQuestion()">Lanjut ➡</button>
-    </div>
-  </main>
-
-  <!-- SCREEN 4: HASIL SESI -->
-  <main id="screenResult" class="screen" style="text-align: center; justify-content: center;">
-    <div class="hero-box" style="max-width: 520px; margin: 0 auto;">
-      <div style="font-size: 4.5rem;" id="resultEmoji">🎉</div>
-      <h2 style="font-size: 1.9rem; margin: 8px 0;" id="resultTitle">Luar Biasa!</h2>
-      <p style="font-size: 1.1rem; margin-bottom: 18px;" id="resultSubtitle">Kamu menyelesaikan petualangan dengan hebat!</p>
-
-      <div style="display: flex; justify-content: center; gap: 16px; margin-bottom: 22px;">
-        <div class="pill star" style="font-size: 1.2rem; padding: 10px 18px;">⭐ +<span id="earnedStars">0</span> Bintang</div>
-        <div class="pill coin" style="font-size: 1.2rem; padding: 10px 18px;">🪙 +<span id="earnedCoins">0</span> Koin</div>
-      </div>
-
-      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-        <button class="btn btn-primary" onclick="restartCurrentMode()">🔄 Main Lagi</button>
-        <button class="btn btn-secondary" onclick="showScreen('screenModes')">🗺️ Pilih Mode Lain</button>
-        <button class="btn btn-success" onclick="showScreen('screenCertificate')">📜 Sertifikat</button>
+  <!-- SCREEN 5: CERTIFICATE -->
+  <section id="screenCert" class="screen">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+      <button class="btn btn-soft" style="padding: 8px 14px; font-size: 0.92rem;" onclick="goScreen('screenMap')">⬅ Peta</button>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <a class="btn btn-gold" style="padding: 8px 14px; font-size: 0.92rem;" href="https://lynk.id/akbareduprintable" target="_blank" rel="noopener noreferrer">🛍️ Worksheet AE</a>
+        <button class="btn btn-primary" style="padding: 8px 16px; font-size: 0.92rem;" onclick="window.print()">🖨️ Cetak / PDF</button>
       </div>
     </div>
-  </main>
 
-  <!-- SCREEN 5: TOKO MASKOT -->
-  <main id="screenShop" class="screen">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-      <button class="btn btn-light" style="padding: 8px 14px; font-size: 0.95rem;" onclick="goHome()">⬅ Kembali</button>
-      <h3 style="margin: 0;">🎁 Toko Teman Petualang</h3>
-    </div>
-    <p style="color: var(--text-muted); margin-top: 0;">Kumpulkan koin dari menjawab soal untuk membuka karakter baru!</p>
-    <div class="shop-grid" id="shopGrid"></div>
-  </main>
-
-  <!-- SCREEN 6: SERTIFIKAT -->
-  <main id="screenCertificate" class="screen">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-      <button class="btn btn-light" style="padding: 8px 14px; font-size: 0.95rem;" onclick="goHome()">⬅ Kembali</button>
-      <button class="btn btn-primary" style="padding: 8px 16px; font-size: 0.95rem;" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
-    </div>
-
-    <div class="certificate-box" id="certificatePrintArea">
-      <div class="cert-header-brand">
-        <svg viewBox="0 0 120 120" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M22 86 A44 44 0 1 1 98 86" stroke="#141414" stroke-width="6.5" stroke-linecap="round"/>
-          <path d="M60 14 L67 34 L63 40 L57 40 L53 34 Z" fill="#141414"/>
-          <rect x="58.5" y="24" width="3" height="8" rx="1" fill="#ffffff"/>
-          <path d="M31 86 L49 38 L57 38 L73 86 L63 86 L59 73 L45 73 L40 86 Z" fill="#141414"/>
-          <polygon points="48,65 56,65 52,51" fill="#ffffff"/>
-          <path d="M53 66 C62 66, 66 56, 78 56 L92 56 L92 64 L78 64 C70 64, 66 73, 55 73 Z" fill="#141414"/>
-          <rect x="74" y="38" width="18" height="5" rx="2" fill="#141414"/>
-          <rect x="74" y="45" width="14" height="4" rx="2" fill="#141414"/>
-          <rect x="74" y="72" width="18" height="4.5" rx="2" fill="#141414"/>
-          <rect x="74" y="79" width="15" height="4.5" rx="2" fill="#141414"/>
-        </svg>
-        <span style="font-size: 0.88rem; font-weight: 800; letter-spacing: 0.5px; color: #141414;">AKBAR EDUPRINTABLE</span>
+    <div class="cert-frame" id="certPrint">
+      <div class="cert-brand-pill">
+        <span>AE</span>
+        <span>•</span>
+        <span>AKBAR EDUPRINTABLE</span>
       </div>
-
-      <h2 class="cert-title">SERTIFIKAT PENGHARGAAN</h2>
-      <p style="margin: 4px 0; font-weight: 700; color: #5c5f66;">Diberikan kepada:</p>
-      <div class="cert-name" id="certChildName">Petualang Cilik</div>
-      <p style="font-size: 1.05rem; max-width: 500px; margin: 10px auto; line-height: 1.5;">
-        Telah menunjukkan semangat belajar yang luar biasa dalam berlatih berhitung dan logika matematika di <strong>Petualangan Pulau Angka</strong>.
+      <h2 style="margin: 6px 0; color: #c2410c; font-size: 1.7rem;">SERTIFIKAT PENJELAJAH ANGKA</h2>
+      <p style="margin: 4px 0; color: var(--muted); font-weight: 700;">Diberikan dengan bangga kepada:</p>
+      <div class="cert-student" id="certName">Anak Hebat</div>
+      <p style="max-width: 480px; margin: 10px auto; line-height: 1.5;">
+        Atas ketekunan dan keberanian menyelesaikan petualangan berhitung di <strong>AE Pulau Angka</strong>.
       </p>
-      <div style="display: flex; justify-content: center; gap: 20px; margin: 16px 0; font-weight: 700;">
-        <span>⭐ Total Bintang: <strong id="certStars">0</strong></span>
-        <span>✅ Soal Benar: <strong id="certCorrect">0</strong></span>
+      <div style="display: flex; justify-content: center; gap: 22px; font-weight: 700; margin: 14px 0;">
+        <span>⭐ Bintang: <strong id="certStarVal">0</strong></span>
+        <span>🎯 Skor Benar: <strong id="certCorrectVal">0</strong></span>
       </div>
-      <p style="font-size: 0.9rem; color: #868e96; margin-top: 16px;" id="certDate"></p>
-      <p style="font-size: 0.85rem; font-weight: 700; color: #2b2d42; margin-top: 6px;">AE • Akbar Eduprintable</p>
+      <p style="font-size: 0.88rem; color: #64748b; margin-top: 14px;" id="certDateVal"></p>
+      <p style="font-size: 0.85rem; font-weight: 800; color: #0f172a;">Akbar Eduprintable (AE) • lynk.id/akbareduprintable</p>
     </div>
-  </main>
+  </section>
 
-  <!-- SCREEN 7: DASHBOARD ORANG TUA -->
-  <main id="screenParent" class="screen">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-      <button class="btn btn-light" style="padding: 8px 14px; font-size: 0.95rem;" onclick="goHome()">⬅ Keluar Mode Ortu</button>
-      <h3 style="margin: 0;">📊 Laporan Perkembangan Anak</h3>
+  <!-- SCREEN 6: PARENT DASHBOARD -->
+  <section id="screenParent" class="screen">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+      <button class="btn btn-soft" style="padding: 8px 14px; font-size: 0.92rem;" onclick="goScreen('screenMap')">⬅ Keluar</button>
+      <h3 style="margin: 0;">📊 Laporan & Pengaturan Orang Tua</h3>
     </div>
 
-    <div style="background: #fff; padding: 16px; border-radius: 18px; margin-bottom: 16px; border: 2px solid #e9ecef;">
-      <label style="display: flex; align-items: center; gap: 10px; font-weight: 700; cursor: pointer;">
-        <input type="checkbox" id="timerSettingCheckbox" onchange="toggleTimerSetting()" style="width: 20px; height: 20px;">
-        Aktifkan Batas Waktu (Timer 20 detik/soal) — <em>Disarankan hanya untuk anak SD yang sudah percaya diri</em>
+    <div style="background:#fff; border:2px solid #e2e8f0; border-radius:18px; padding:14px; margin-bottom:14px;">
+      <label style="display:flex; align-items:center; gap:10px; font-weight:700; cursor:pointer;">
+        <input type="checkbox" id="chkTimer" onchange="updateTimerPref()" style="width:19px; height:19px;">
+        Aktifkan Timer 20 Detik per Soal (cocok untuk latihan kecepatan anak SD)
       </label>
     </div>
 
-    <table class="stat-table">
-      <thead>
-        <tr>
-          <th>Topik / Materi</th>
-          <th>Dijawab</th>
-          <th>Benar</th>
-          <th>Akurasi</th>
-        </tr>
-      </thead>
-      <tbody id="parentStatsBody"></tbody>
-    </table>
-
-    <div style="background: #e7f5ff; border: 2px solid #74c0fc; padding: 14px; border-radius: 16px; margin-bottom: 16px;">
-      <strong>💡 Rekomendasi Pendampingan:</strong>
-      <p id="parentAdviceText" style="margin: 6px 0 0;">Mulai mainkan minimal 1 sesi (10 soal) untuk melihat analisis kemampuan anak.</p>
+    <div style="background:#eff6ff; border:2px solid #93c5fd; border-radius:18px; padding:14px; margin-bottom:14px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+      <div>
+        <strong>📚 Lengkapi Belajar di Rumah</strong>
+        <div style="font-size:0.85rem; color:var(--muted);">Lihat koleksi lembar aktivitas & printable edukatif lainnya.</div>
+      </div>
+      <a class="btn btn-secondary" style="padding: 8px 14px; font-size: 0.9rem;" href="https://lynk.id/akbareduprintable" target="_blank" rel="noopener noreferrer">Buka lynk.id/akbareduprintable</a>
     </div>
 
-    <button class="btn btn-light" style="color: #c92a2a;" onclick="resetAllProgress()">🗑️ Reset Semua Data Progres</button>
-  </main>
+    <div id="parentReportList" style="display:grid; gap:10px; margin-bottom:16px;"></div>
 
-  <!-- FOOTER -->
-  <footer class="app-footer">
-    <span>© <strong>Akbar Eduprintable</strong> (AE) • Media Belajar Interaktif PAUD, TK & SD</span>
+    <button class="btn btn-soft" style="color:#be123c;" onclick="resetActiveProfile()">🗑️ Reset Progres Profil Ini</button>
+  </section>
+
+  <footer class="footer-bar">
+    <strong>Akbar Eduprintable (AE)</strong> •
+    <a href="https://lynk.id/akbareduprintable" target="_blank" rel="noopener noreferrer">lynk.id/akbareduprintable</a>
   </footer>
 </div>
 
 <!-- PARENT GATE MODAL -->
-<div class="modal-overlay" id="parentGateModal">
-  <div class="modal-card">
-    <div style="font-size: 2.5rem;">🔒</div>
-    <h3 style="margin: 8px 0;">Verifikasi Orang Tua</h3>
-    <p style="color: var(--text-muted); font-size: 0.95rem;">Jawab soal berikut untuk membuka pengaturan & laporan:</p>
-    <div style="font-size: 1.6rem; font-weight: 700; margin: 14px 0; color: var(--primary-dark);" id="gateQuestion">14 × 3 = ?</div>
-    <input type="number" id="gateAnswerInput" style="width: 100%; padding: 12px; font-size: 1.3rem; text-align: center; border-radius: 14px; border: 2px solid #ced4da; margin-bottom: 14px;" placeholder="Jawaban..." />
-    <div style="display: flex; gap: 10px; justify-content: center;">
-      <button class="btn btn-light" onclick="closeParentGate()">Batal</button>
-      <button class="btn btn-primary" onclick="verifyParentGate()">Masuk</button>
+<div class="modal-bg" id="gateModal">
+  <div class="modal-box">
+    <div style="font-size: 2.3rem;">🔐</div>
+    <h3 style="margin: 6px 0;">Kunci Orang Tua</h3>
+    <p style="font-size: 0.9rem; color: var(--muted);">Jawab perkalian berikut untuk masuk:</p>
+    <div style="font-size: 1.5rem; font-weight: 700; margin: 12px 0; color: var(--primary-dark);" id="gateMath">12 × 4 = ?</div>
+    <input type="number" id="gateInput" placeholder="Jawaban..." style="width:100%; padding:11px; font-size:1.2rem; text-align:center; border-radius:14px; border:2px solid #cbd5e1; margin-bottom:12px;" />
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <button class="btn btn-soft" onclick="closeGate()">Batal</button>
+      <button class="btn btn-primary" onclick="checkGate()">Buka</button>
     </div>
   </div>
 </div>
 
 <script>
-  /* ================= AUDIO ENGINE (WEB AUDIO API) ================= */
-  let soundEnabled = true;
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  /* ================= SOUND ENGINE ================= */
+  let audioOn = true;
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  function tone(freq, type = 'sine', dur = 0.14, delay = 0) {
+    if (!audioOn) return;
+    if (ctx.state === 'suspended') ctx.resume();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = type;
+    o.frequency.setValueAtTime(freq, ctx.currentTime + delay);
+    g.gain.setValueAtTime(0.16, ctx.currentTime + delay);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + dur);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(ctx.currentTime + delay);
+    o.stop(ctx.currentTime + delay + dur);
+  }
+  const sfxTap = () => tone(540, 'triangle', 0.08);
+  const sfxCount = (i) => tone(420 + i * 35, 'sine', 0.11);
+  const sfxRight = () => { tone(523, 'triangle', 0.14, 0); tone(659, 'triangle', 0.14, 0.09); tone(784, 'triangle', 0.22, 0.18); };
+  const sfxWrong = () => { tone(280, 'sawtooth', 0.16, 0); tone(220, 'sawtooth', 0.2, 0.13); };
+  const sfxFanfare = () => [523, 659, 784, 1046].forEach((f, idx) => tone(f, 'triangle', 0.2, idx * 0.11));
 
-  function playTone(freq, type = 'sine', duration = 0.15, delay = 0) {
-    if (!soundEnabled) return;
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
-    gain.gain.setValueAtTime(0.18, audioCtx.currentTime + delay);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + duration);
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.start(audioCtx.currentTime + delay);
-    osc.stop(audioCtx.currentTime + delay + duration);
-  }
-
-  function sfxClick() { playTone(520, 'triangle', 0.08); }
-  function sfxPop(idx = 0) { playTone(400 + (idx * 35), 'sine', 0.12); }
-  function sfxCorrect() {
-    playTone(523.25, 'triangle', 0.15, 0);
-    playTone(659.25, 'triangle', 0.15, 0.1);
-    playTone(783.99, 'triangle', 0.25, 0.2);
-  }
-  function sfxWrong() {
-    playTone(300, 'sine', 0.2, 0);
-    playTone(250, 'sine', 0.25, 0.15);
-  }
-  function sfxWin() {
-    [523, 659, 784, 1046].forEach((f, i) => playTone(f, 'triangle', 0.22, i * 0.12));
+  function toggleAudio() {
+    audioOn = !audioOn;
+    document.getElementById('btnSound').textContent = audioOn ? '🔊' : '🔇';
+    if (audioOn) sfxTap();
   }
 
-  function toggleSound() {
-    soundEnabled = !soundEnabled;
-    document.getElementById('soundToggleBtn').textContent = soundEnabled ? '🔊' : '🔇';
-    if (soundEnabled) sfxClick();
-  }
-
-  /* ================= STATE & STORAGE ================= */
-  const MASCOTS = [
-    { id: 'lion', icon: '🦁', name: 'Singa Leo', price: 0 },
-    { id: 'bunny', icon: '🐰', name: 'Kelinci Momo', price: 30 },
-    { id: 'dino', icon: '🦖', name: 'Dino Rexi', price: 60 },
-    { id: 'astro', icon: '🧑‍🚀', name: 'Astronot Bima', price: 100 },
-    { id: 'unicorn', icon: '🦄', name: 'Kuda Poni', price: 150 },
-    { id: 'robot', icon: '🤖', name: 'Robo Pintar', price: 200 }
+  /* ================= PROFILES & STORAGE ================= */
+  const CHARACTERS = [
+    { id: 'lion', icon: '🦁', name: 'Singa Leo', cost: 0 },
+    { id: 'fox', icon: '🦊', name: 'Rubah Kiki', cost: 35 },
+    { id: 'dino', icon: '🦕', name: 'Bronto', cost: 70 },
+    { id: 'astro', icon: '🧑‍🚀', name: 'Kapten Bima', cost: 110 },
+    { id: 'dragon', icon: '🐉', name: 'Naga Cilik', cost: 160 },
+    { id: 'owl', icon: '🦉', name: 'Burung Hantu', cost: 220 }
   ];
 
-  const defaultState = {
-    childName: 'Petualang Cilik',
-    coins: 20,
-    stars: 0,
-    equippedMascot: '🦁',
-    ownedMascots: ['lion'],
+  function freshProfile(name) {
+    return {
+      name,
+      coins: 25,
+      stars: 0,
+      combo: 0,
+      character: '🦁',
+      ownedChars: ['lion'],
+      zoneStars: {},
+      stats: {},
+      totalCorrect: 0
+    };
+  }
+
+  let store = JSON.parse(localStorage.getItem('aePulauAngkaV2')) || {
+    activeIdx: 0,
     useTimer: false,
-    stats: {}
+    profiles: [freshProfile('Anak 1'), freshProfile('Anak 2'), freshProfile('Anak 3')]
   };
 
-  let appState = JSON.parse(localStorage.getItem('pulauAngkaState')) || defaultState;
-
-  function saveState() {
-    localStorage.setItem('pulauAngkaState', JSON.stringify(appState));
-    updateHeaderUI();
+  function currentProfile() {
+    return store.profiles[store.activeIdx];
   }
 
-  function updateHeaderUI() {
-    document.getElementById('coinCount').textContent = appState.coins;
-    document.getElementById('starCount').textContent = appState.stars;
-    document.getElementById('heroMascot').textContent = appState.equippedMascot;
-    document.getElementById('displayChildName').textContent = appState.childName;
-    document.getElementById('childNameInput').value = appState.childName === 'Petualang Cilik' ? '' : appState.childName;
+  function saveStore() {
+    localStorage.setItem('aePulauAngkaV2', JSON.stringify(store));
+    refreshHud();
   }
 
-  function saveChildName() {
-    sfxClick();
-    const val = document.getElementById('childNameInput').value.trim();
-    appState.childName = val || 'Petualang Cilik';
-    saveState();
+  function refreshHud() {
+    const p = currentProfile();
+    document.getElementById('hudCoins').textContent = p.coins;
+    document.getElementById('hudStars').textContent = p.stars;
+    document.getElementById('hudCombo').textContent = p.combo;
+    document.getElementById('lobbySprite').textContent = p.character;
+    document.getElementById('lobbyName').textContent = p.name;
+    document.getElementById('editNameInput').value = p.name;
+    renderProfileChips();
   }
 
-  /* ================= NAVIGATION ================= */
-  function showScreen(id) {
-    sfxClick();
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    if (id === 'screenShop') renderShop();
-    if (id === 'screenCertificate') renderCertificate();
-    if (id === 'screenParent') renderParentDashboard();
+  function renderProfileChips() {
+    const wrap = document.getElementById('profileSwitcher');
+    wrap.innerHTML = '<span style="font-size:0.8rem; font-weight:800;">PROFIL:</span>';
+    store.profiles.forEach((pr, i) => {
+      const btn = document.createElement('button');
+      btn.className = `profile-chip ${i === store.activeIdx ? 'active' : ''}`;
+      btn.textContent = `${pr.character} ${pr.name}`;
+      btn.onclick = () => {
+        sfxTap();
+        store.activeIdx = i;
+        saveStore();
+        renderMap();
+      };
+      wrap.appendChild(btn);
+    });
   }
 
-  function goHome() {
-    clearInterval(timerInterval);
-    showScreen('screenHome');
+  function renameActiveProfile() {
+    sfxTap();
+    const v = document.getElementById('editNameInput').value.trim();
+    if (v) {
+      currentProfile().name = v;
+      saveStore();
+    }
   }
 
-  /* ================= MODES BY JENJANG ================= */
-  const MODES_CONFIG = {
+  /* ================= WORLD MAP ZONES ================= */
+  const ZONES = {
     PAUD: [
-      { id: 'paud_count', icon: '🍎', title: 'Kebun Hitung 1–10', desc: 'Sentuh & hitung jumlah buah lucu' },
-      { id: 'paud_compare', icon: '⚖️', title: 'Banyak vs Sedikit', desc: 'Mana kelompok benda yang lebih banyak?' },
-      { id: 'paud_order', icon: '🚂', title: 'Kereta Angka', desc: 'Melengkapi urutan angka 1 sampai 10' },
-      { id: 'paud_add_visual', icon: '🧁', title: 'Gabung Kue', desc: 'Penjumlahan gambar sederhana (1–5)' }
+      { id: 'paud_1', step: 'Pos 1', icon: '🍓', title: 'Kebun Buah', sub: 'Hitung benda 1–10', topic: 'Hitung Benda' },
+      { id: 'paud_2', step: 'Pos 2', icon: '⚖️', title: 'Bukit Timbang', sub: 'Banyak vs sedikit', topic: 'Banyak Sedikit' },
+      { id: 'paud_3', step: 'Pos 3', icon: '🚂', title: 'Rel Angka', sub: 'Urutan angka 1–10', topic: 'Urutan Angka' },
+      { id: 'paud_4', step: 'Pos 4', icon: '🧁', title: 'Pesta Kue', sub: 'Gabung gambar 1–5', topic: 'Gabung Gambar' }
     ],
     TK: [
-      { id: 'tk_add', icon: '➕', title: 'Toko Penjumlahan', desc: 'Penjumlahan angka 1–20 dengan gambar' },
-      { id: 'tk_sub', icon: '➖', title: 'Kapal Pengurangan', desc: 'Pengurangan mudah angka 1–20' },
-      { id: 'tk_compare', icon: '🐊', title: 'Buaya Pemakan Angka', desc: 'Pilih simbol < , > , atau =' },
-      { id: 'tk_story', icon: '📖', title: 'Cerita Berhitung', desc: 'Soal cerita bergambar sehari-hari' }
+      { id: 'tk_1', step: 'Pos 1', icon: '➕', title: 'Desa Tambah', sub: 'Penjumlahan 1–20', topic: 'Penjumlahan TK' },
+      { id: 'tk_2', step: 'Pos 2', icon: '⛵', title: 'Laut Kurang', sub: 'Pengurangan 1–20', topic: 'Pengurangan TK' },
+      { id: 'tk_3', step: 'Pos 3', icon: '🐊', title: 'Sungai Simbol', sub: 'Bandingkan < , > , =', topic: 'Simbol Angka' },
+      { id: 'tk_4', step: 'Pos 4', icon: '📖', title: 'Kampung Cerita', sub: 'Cerita berhitung harian', topic: 'Cerita TK' }
     ],
     SD: [
-      { id: 'sd_mul', icon: '✖️', title: 'Jembatan Perkalian', desc: 'Perkalian dasar 1–9 & visual kelompok' },
-      { id: 'sd_div', icon: '➗', title: 'Pulau Pembagian', desc: 'Pembagian adil tanpa sisa' },
-      { id: 'sd_mystery', icon: '🕵️', title: 'Angka Misteri', desc: 'Cari angka yang hilang (? + 8 = 23)' },
-      { id: 'sd_mix', icon: '⚡', title: 'Tantangan Campuran', desc: 'Operasi hitung campuran & logika' }
+      { id: 'sd_1', step: 'Pos 1', icon: '🌉', title: 'Jembatan Kali', sub: 'Perkalian dasar 1–9', topic: 'Perkalian SD' },
+      { id: 'sd_2', step: 'Pos 2', icon: '🏝️', title: 'Pulau Bagi', sub: 'Pembagian tepat', topic: 'Pembagian SD' },
+      { id: 'sd_3', step: 'Pos 3', icon: '🕵️', title: 'Gua Misteri', sub: 'Cari angka hilang', topic: 'Angka Misteri' },
+      { id: 'sd_4', step: 'Pos 4', icon: '⚡', title: 'Menara Logika', sub: 'Tantangan campuran', topic: 'Campuran SD' }
     ]
   };
 
-  let currentJenjang = 'TK';
-  let currentMode = null;
+  let activeJenjang = 'PAUD';
+  let activeZone = null;
 
-  function selectJenjang(jenjang) {
-    currentJenjang = jenjang;
-    document.getElementById('selectedJenjangBadge').textContent = `Jenjang: ${jenjang}`;
-    const container = document.getElementById('modeListContainer');
-    container.innerHTML = '';
-
-    MODES_CONFIG[jenjang].forEach(m => {
-      const card = document.createElement('div');
-      card.className = 'mode-card';
-      card.innerHTML = `
-        <div class="mode-icon">${m.icon}</div>
-        <div class="mode-title">${m.title}</div>
-        <div class="mode-desc">${m.desc}</div>
-      `;
-      card.onclick = () => startSession(m);
-      container.appendChild(card);
+  function chooseJenjang(j) {
+    sfxTap();
+    activeJenjang = j;
+    ['PAUD', 'TK', 'SD'].forEach(k => {
+      document.getElementById('tab' + k).classList.toggle('active', k === j);
     });
-
-    showScreen('screenModes');
+    renderMap();
   }
 
-  /* ================= QUESTION GENERATOR ================= */
-  const EMOJIS = ['🍎', '🍓', '🍌', '🍊', '🍉', '🧁', '🍩', '⭐', '🐠', '🐥', '🚗', '🎈'];
-  let sessionQuestions = [];
-  let qIndex = 0;
-  let sessionCorrect = 0;
-  let wrongAttempts = 0;
-  let timerInterval = null;
-  let timeLeft = 20;
+  function renderMap() {
+    const p = currentProfile();
+    const box = document.getElementById('mapZonesContainer');
+    box.innerHTML = '';
 
-  function rand(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+    ZONES[activeJenjang].forEach(z => {
+      const earned = p.zoneStars[z.id] || 0;
+      const card = document.createElement('div');
+      card.className = `zone-node ${earned > 0 ? 'cleared' : ''}`;
+      const starsStr = '⭐'.repeat(earned) + '☆'.repeat(3 - earned);
+      card.innerHTML = `
+        <span class="zone-step">${z.step}</span>
+        <div class="zone-icon">${z.icon}</div>
+        <div class="zone-title">${z.title}</div>
+        <div class="zone-sub">${z.sub}</div>
+        <div class="zone-stars">${starsStr}</div>
+      `;
+      card.onclick = () => launchZone(z);
+      box.appendChild(card);
+    });
   }
 
-  function shuffle(arr) {
-    return arr.sort(() => Math.random() - 0.5);
+  function goScreen(id) {
+    sfxTap();
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if (id === 'screenMap') renderMap();
+    if (id === 'screenShop') renderShop();
+    if (id === 'screenCert') renderCert();
+    if (id === 'screenParent') renderParent();
   }
 
-  function makeOptions(correct, min = 0, max = 30) {
-    const set = new Set([correct]);
-    while (set.size < 4) {
-      let delta = rand(-4, 4);
-      let candidate = correct + delta;
-      if (candidate >= min && candidate !== correct) set.add(candidate);
-      else set.add(rand(min, Math.max(max, correct + 6)));
+  /* ================= QUESTION ENGINE ================= */
+  const ICONS = ['🍓', '🍎', '🍊', '🍌', '🧁', '🍩', '⭐', '🐠', '🐥', '🎈'];
+  let qList = [], qPos = 0, qRightCount = 0, hearts = 3, attemptsOnQ = 0, timerId = null, secLeft = 20;
+
+  const rnd = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
+  const mixArr = (arr) => arr.sort(() => Math.random() - 0.5);
+
+  function genChoices(ans, lo = 0, hi = 25) {
+    const s = new Set([ans]);
+    while (s.size < 4) {
+      const cand = ans + rnd(-4, 4);
+      if (cand >= lo && cand !== ans) s.add(cand);
+      else s.add(rnd(lo, Math.max(hi, ans + 5)));
     }
-    return shuffle([...set]);
+    return mixArr([...s]);
   }
 
-  function generateQuestion(modeId) {
-    const emoji = EMOJIS[rand(0, EMOJIS.length - 1)];
+  function makeQuestion(zone) {
+    const ic = ICONS[rnd(0, ICONS.length - 1)];
+    const id = zone.id;
 
-    // PAUD
-    if (modeId === 'paud_count') {
-      const n = rand(1, 10);
+    if (id === 'paud_1') {
+      const n = rnd(1, 10);
       return {
-        topic: 'Menghitung Benda',
-        visualGroups: [[emoji, n]],
-        text: `Ada berapa ${emoji} di atas?`,
-        speak: `Ada berapa benda di layar? Sentuh gambarnya untuk menghitung.`,
-        correct: n,
-        options: makeOptions(n, 1, 12),
-        hint: `Yuk sentuh satu per satu gambarnya, jumlahnya ada ${n}.`
+        topic: zone.topic,
+        groups: [[ic, n]],
+        prompt: `Sentuh & hitung ada berapa ${ic}?`,
+        say: `Ada berapa benda di layar? Sentuh gambarnya untuk menghitung.`,
+        ans: n,
+        choices: genChoices(n, 1, 12),
+        hint: `Hitung satu per satu gambarnya, semuanya ada ${n}.`
       };
     }
-
-    if (modeId === 'paud_compare') {
-      let a = rand(1, 7), b = rand(1, 7);
-      while (a === b) b = rand(1, 7);
+    if (id === 'paud_2') {
+      let a = rnd(1, 7), b = rnd(1, 7);
+      while (a === b) b = rnd(1, 7);
       const ans = a > b ? 'Kiri' : 'Kanan';
       return {
-        topic: 'Banyak vs Sedikit',
-        visualGroups: [[emoji, a], ['⭐', b]],
-        text: `Kelompok mana yang LEBIH BANYAK?`,
-        speak: `Kelompok mana yang lebih banyak? Kiri atau kanan?`,
-        correct: ans,
-        options: ['Kiri', 'Kanan'],
-        hint: `Sebelah kiri ada ${a}, sebelah kanan ada ${b}. Yang lebih banyak adalah ${ans}.`
+        topic: zone.topic,
+        groups: [[ic, a], ['⭐', b]],
+        prompt: `Mana yang LEBIH BANYAK?`,
+        say: `Kelompok mana yang lebih banyak? Kiri atau kanan?`,
+        ans,
+        choices: ['Kiri', 'Kanan'],
+        hint: `Kiri ada ${a} dan kanan ada ${b}. Yang lebih banyak adalah ${ans}.`
       };
     }
-
-    if (modeId === 'paud_order') {
-      const start = rand(1, 7);
-      const seq = [start, start + 1, '?', start + 3];
-      const ans = start + 2;
+    if (id === 'paud_3') {
+      const s = rnd(1, 7);
+      const ans = s + 2;
       return {
-        topic: 'Urutan Angka',
-        visualGroups: [],
-        text: `${seq.join('  ,  ')}`,
-        speak: `Angka berapa yang hilang? ${start}, ${start+1}, titik-titik, ${start+3}.`,
-        correct: ans,
-        options: makeOptions(ans, 1, 12),
-        hint: `Setelah angka ${start + 1} adalah angka ${ans}.`
+        topic: zone.topic,
+        groups: [],
+        prompt: `${s}  →  ${s + 1}  →  [ ? ]  →  ${s + 3}`,
+        say: `Angka berapa yang melengkapi urutan setelah ${s + 1}?`,
+        ans,
+        choices: genChoices(ans, 1, 12),
+        hint: `Setelah ${s + 1} adalah angka ${ans}.`
       };
     }
-
-    if (modeId === 'paud_add_visual') {
-      const a = rand(1, 4), b = rand(1, 4);
-      const ans = a + b;
+    if (id === 'paud_4') {
+      const a = rnd(1, 4), b = rnd(1, 4), ans = a + b;
       return {
-        topic: 'Gabung Benda',
-        visualGroups: [[emoji, a], [emoji, b]],
-        text: `${a} + ${b} = ?`,
-        speak: `${a} ditambah ${b} sama dengan berapa?`,
-        correct: ans,
-        options: makeOptions(ans, 2, 10),
-        hint: `Gabungkan semuanya: ${a} benda dan ${b} benda menjadi ${ans}.`
+        topic: zone.topic,
+        groups: [[ic, a], [ic, b]],
+        prompt: `${a} + ${b} = ?`,
+        say: `${a} ditambah ${b} sama dengan berapa?`,
+        ans,
+        choices: genChoices(ans, 2, 10),
+        hint: `Gabungkan ${a} dan ${b} benda menjadi ${ans}.`
       };
     }
-
-    // TK
-    if (modeId === 'tk_add') {
-      const a = rand(2, 10), b = rand(1, 9);
-      const ans = a + b;
+    if (id === 'tk_1') {
+      const a = rnd(2, 12), b = rnd(1, 8), ans = a + b;
       return {
-        topic: 'Penjumlahan TK',
-        visualGroups: a <= 6 && b <= 6 ? [[emoji, a], [emoji, b]] : [],
-        text: `${a} + ${b} = ?`,
-        speak: `Berapa hasil dari ${a} ditambah ${b}?`,
-        correct: ans,
-        options: makeOptions(ans, 2, 20),
-        hint: `Simpan angka ${a} di kepala, lalu hitung maju ${b} langkah. Hasilnya ${ans}.`
+        topic: zone.topic,
+        groups: a <= 6 && b <= 6 ? [[ic, a], [ic, b]] : [],
+        prompt: `${a} + ${b} = ?`,
+        say: `Berapa hasil ${a} ditambah ${b}?`,
+        ans,
+        choices: genChoices(ans, 2, 22),
+        hint: `Hitung maju ${b} langkah dari ${a}, hasilnya ${ans}.`
       };
     }
-
-    if (modeId === 'tk_sub') {
-      const a = rand(5, 16), b = rand(1, a - 1);
-      const ans = a - b;
+    if (id === 'tk_2') {
+      const a = rnd(6, 18), b = rnd(1, a - 1), ans = a - b;
       return {
-        topic: 'Pengurangan TK',
-        visualGroups: a <= 10 ? [[emoji, a]] : [],
-        text: `${a} − ${b} = ?`,
-        speak: `Berapa hasil dari ${a} dikurangi ${b}?`,
-        correct: ans,
-        options: makeOptions(ans, 0, 16),
-        hint: `Dari ${a}, hitung mundur ${b} langkah. Jawabannya adalah ${ans}.`
+        topic: zone.topic,
+        groups: a <= 10 ? [[ic, a]] : [],
+        prompt: `${a} − ${b} = ?`,
+        say: `Berapa hasil ${a} dikurangi ${b}?`,
+        ans,
+        choices: genChoices(ans, 0, 18),
+        hint: `Hitung mundur ${b} langkah dari ${a}, hasilnya ${ans}.`
       };
     }
-
-    if (modeId === 'tk_compare') {
-      const a = rand(1, 20), b = rand(1, 20);
+    if (id === 'tk_3') {
+      const a = rnd(1, 20), b = rnd(1, 20);
       const ans = a > b ? '>' : (a < b ? '<' : '=');
       return {
-        topic: 'Bandingkan Angka',
-        visualGroups: [],
-        text: `${a}   [ ? ]   ${b}`,
-        speak: `${a} lebih besar, lebih kecil, atau sama dengan ${b}?`,
-        correct: ans,
-        options: ['<', '>', '='],
-        hint: `Mulut buaya selalu memakan angka yang lebih besar! (${a} ${ans} ${b})`
+        topic: zone.topic,
+        groups: [],
+        prompt: `${a}   [ ? ]   ${b}`,
+        say: `Pilih tanda yang tepat untuk ${a} dan ${b}.`,
+        ans,
+        choices: ['<', '>', '='],
+        hint: `Tanda terbuka mengarah ke angka lebih besar (${a} ${ans} ${b}).`
       };
     }
-
-    if (modeId === 'tk_story') {
-      const a = rand(3, 8), b = rand(2, 6);
-      const isAdd = Math.random() > 0.4;
-      if (isAdd) {
+    if (id === 'tk_4') {
+      const a = rnd(3, 9), b = rnd(2, 6);
+      if (Math.random() > 0.45) {
         const ans = a + b;
         return {
-          topic: 'Soal Cerita TK',
-          story: `Budi memiliki ${a} ${emoji}. Ibu memberinya lagi ${b} ${emoji}. Berapa jumlah ${emoji} Budi sekarang?`,
-          speak: `Budi memiliki ${a} benda. Ibu memberinya lagi ${b} benda. Berapa jumlahnya sekarang?`,
-          correct: ans,
-          options: makeOptions(ans, 3, 18),
-          hint: `Karena diberi lagi, kita jumlahkan: ${a} + ${b} = ${ans}.`
-        };
-      } else {
-        const ans = a - b;
-        return {
-          topic: 'Soal Cerita TK',
-          story: `Di piring ada ${a} ${emoji}. Adik memakan ${b} ${emoji}. Berapa sisa ${emoji} di piring?`,
-          speak: `Di piring ada ${a} benda. Adik memakan ${b} benda. Berapa sisanya?`,
-          correct: ans,
-          options: makeOptions(ans, 0, 10),
-          hint: `Karena dimakan, jumlahnya berkurang: ${a} - ${b} = ${ans}.`
+          topic: zone.topic,
+          groups: [],
+          story: `Raka punya ${a} ${ic}. Kakak memberi ${b} ${ic} lagi. Berapa jumlah ${ic} Raka?`,
+          say: `Raka punya ${a} benda, lalu diberi ${b} lagi. Berapa jumlahnya?`,
+          ans,
+          choices: genChoices(ans, 3, 20),
+          hint: `Dijumlahkan: ${a} + ${b} = ${ans}.`
         };
       }
-    }
-
-    // SD
-    if (modeId === 'sd_mul') {
-      const a = rand(2, 9), b = rand(2, 9);
-      const ans = a * b;
+      const ans = a - b;
       return {
-        topic: 'Perkalian Dasar',
-        visualGroups: a <= 4 && b <= 5 ? Array.from({ length: a }, () => [emoji, b]) : [],
-        text: `${a} × ${b} = ?`,
-        speak: `Berapa hasil dari ${a} dikali ${b}?`,
-        correct: ans,
-        options: makeOptions(ans, 4, 81),
-        hint: `${a} × ${b} artinya menjumlahkan angka ${b} sebanyak ${a} kali = ${ans}.`
+        topic: zone.topic,
+        groups: [],
+        story: `Ada ${a} ${ic} di meja. ${b} ${ic} terjatuh. Berapa sisa ${ic} di meja?`,
+        say: `Ada ${a} benda, ${b} terjatuh. Berapa sisanya?`,
+        ans,
+        choices: genChoices(ans, 0, 12),
+        hint: `Dikurangi: ${a} - ${b} = ${ans}.`
+      };
+    }
+    if (id === 'sd_1') {
+      const a = rnd(2, 9), b = rnd(2, 9), ans = a * b;
+      return {
+        topic: zone.topic,
+        groups: a <= 4 && b <= 5 ? Array.from({ length: a }, () => [ic, b]) : [],
+        prompt: `${a} × ${b} = ?`,
+        say: `Berapa ${a} dikali ${b}?`,
+        ans,
+        choices: genChoices(ans, 4, 81),
+        hint: `${a} kelompok masing-masing ${b} menghasilkan ${ans}.`
+      };
+    }
+    if (id === 'sd_2') {
+      const b = rnd(2, 9), ans = rnd(2, 9), a = b * ans;
+      return {
+        topic: zone.topic,
+        groups: [],
+        prompt: `${a} ÷ ${b} = ?`,
+        say: `Berapa ${a} dibagi ${b}?`,
+        ans,
+        choices: genChoices(ans, 1, 12),
+        hint: `${b} × ${ans} = ${a}, jadi jawabannya ${ans}.`
+      };
+    }
+    if (id === 'sd_3') {
+      const a = rnd(5, 18), ans = rnd(4, 16), sum = a + ans;
+      return {
+        topic: zone.topic,
+        groups: [],
+        prompt: `${a} + [ ? ] = ${sum}`,
+        say: `${a} ditambah berapa supaya menjadi ${sum}?`,
+        ans,
+        choices: genChoices(ans, 1, 30),
+        hint: `Hitung selisihnya: ${sum} - ${a} = ${ans}.`
       };
     }
 
-    if (modeId === 'sd_div') {
-      const b = rand(2, 9), ans = rand(2, 9);
-      const a = b * ans;
-      return {
-        topic: 'Pembagian Dasar',
-        visualGroups: [],
-        text: `${a} ÷ ${b} = ?`,
-        speak: `Berapa hasil dari ${a} dibagi ${b}?`,
-        correct: ans,
-        options: makeOptions(ans, 1, 12),
-        hint: `Ingat perkalian: ${b} dikali berapa yang hasilnya ${a}? Jawabannya ${ans}.`
-      };
-    }
-
-    if (modeId === 'sd_mystery') {
-      const a = rand(4, 15), ans = rand(3, 15);
-      const total = a + ans;
-      return {
-        topic: 'Angka Misteri',
-        visualGroups: [],
-        text: `${a} + [ ? ] = ${total}`,
-        speak: `${a} ditambah berapa agar hasilnya ${total}?`,
-        correct: ans,
-        options: makeOptions(ans, 1, 25),
-        hint: `Kurangkan hasil dengan angka yang diketahui: ${total} - ${a} = ${ans}.`
-      };
-    }
-
-    // sd_mix
-    const subModes = ['sd_mul', 'sd_div', 'sd_mystery'];
-    return generateQuestion(subModes[rand(0, subModes.length - 1)]);
+    const pick = rnd(0, 2);
+    if (pick === 0) return makeQuestion({ ...zone, id: 'sd_1' });
+    if (pick === 1) return makeQuestion({ ...zone, id: 'sd_2' });
+    return makeQuestion({ ...zone, id: 'sd_3' });
   }
 
-  /* ================= GAMEPLAY FLOW ================= */
-  function startSession(modeObj) {
-    currentMode = modeObj;
-    sessionQuestions = Array.from({ length: 10 }, () => generateQuestion(modeObj.id));
-    qIndex = 0;
-    sessionCorrect = 0;
-    showScreen('screenGame');
-    renderQuestion();
+  /* ================= ARENA LOOP ================= */
+  function launchZone(zone) {
+    activeZone = zone;
+    qList = Array.from({ length: 10 }, () => makeQuestion(zone));
+    qPos = 0;
+    qRightCount = 0;
+    hearts = 3;
+    goScreen('screenArena');
+    drawQuestion();
   }
 
-  function restartCurrentMode() {
-    if (currentMode) startSession(currentMode);
+  function replayZone() {
+    if (activeZone) launchZone(activeZone);
   }
 
-  function exitGame() {
-    clearInterval(timerInterval);
-    showScreen('screenModes');
+  function leaveArena() {
+    clearInterval(timerId);
+    goScreen('screenMap');
   }
 
-  function renderQuestion() {
-    wrongAttempts = 0;
-    const q = sessionQuestions[qIndex];
-    document.getElementById('qNumber').textContent = qIndex + 1;
-    document.getElementById('gameProgressBar').style.width = `${(qIndex / 10) * 100}%`;
-    document.getElementById('gameTopicTag').textContent = q.topic;
+  function drawQuestion() {
+    attemptsOnQ = 0;
+    const q = qList[qPos];
+    const p = currentProfile();
 
-    const fb = document.getElementById('feedbackBanner');
-    fb.className = 'feedback-banner';
+    document.getElementById('arenaStepText').textContent = `${qPos + 1}/10`;
+    document.getElementById('arenaHearts').textContent = hearts;
+    document.getElementById('arenaProgress').style.width = `${(qPos / 10) * 100}%`;
+
+    const mascot = document.getElementById('arenaMascot');
+    mascot.textContent = p.character;
+    mascot.className = 'actor-sprite';
+    document.getElementById('arenaSpeech').textContent = `Misi ${activeZone.title} — Ayo jawab!`;
+
+    const fb = document.getElementById('arenaFeedback');
+    fb.className = 'feedback-bar';
     fb.style.display = 'none';
 
-    const vStage = document.getElementById('visualStage');
-    vStage.innerHTML = '';
-    if (q.visualGroups && q.visualGroups.length > 0) {
-      q.visualGroups.forEach(grp => {
+    const tray = document.getElementById('arenaObjects');
+    tray.innerHTML = '';
+    if (q.groups && q.groups.length) {
+      q.groups.forEach(([em, cnt]) => {
         const box = document.createElement('div');
-        box.className = 'visual-group';
-        const [em, count] = grp;
-        for (let i = 0; i < count; i++) {
-          const span = document.createElement('span');
-          span.className = 'visual-item';
-          span.textContent = em;
-          span.onclick = () => {
-            span.classList.toggle('counted');
-            sfxPop(i);
+        box.className = 'basket-card';
+        for (let i = 0; i < cnt; i++) {
+          const el = document.createElement('span');
+          el.className = 'tap-item';
+          el.textContent = em;
+          el.onclick = () => {
+            el.classList.toggle('active-tap');
+            sfxCount(i);
           };
-          box.appendChild(span);
+          box.appendChild(el);
         }
-        vStage.appendChild(box);
+        tray.appendChild(box);
       });
     }
 
-    const qContent = document.getElementById('questionContent');
-    if (q.story) {
-      qContent.innerHTML = `<div class="question-story">${q.story}</div>`;
-    } else {
-      qContent.innerHTML = `<div class="question-text">${q.text}</div>`;
-    }
+    const promptBox = document.getElementById('arenaPrompt');
+    promptBox.innerHTML = q.story
+      ? `<div class="prompt-story">${q.story}</div>`
+      : `<div class="prompt-big">${q.prompt}</div>`;
 
-    const optGrid = document.getElementById('optionsGrid');
-    optGrid.innerHTML = '';
-    q.options.forEach(opt => {
-      const btn = document.createElement('button');
-      btn.className = 'option-btn';
-      btn.textContent = opt;
-      btn.onclick = () => handleAnswer(btn, opt, q);
-      optGrid.appendChild(btn);
+    const grid = document.getElementById('arenaChoices');
+    grid.innerHTML = '';
+    q.choices.forEach(opt => {
+      const b = document.createElement('button');
+      b.className = 'choice-btn';
+      b.textContent = opt;
+      b.onclick = () => pickChoice(b, opt, q);
+      grid.appendChild(b);
     });
 
-    clearInterval(timerInterval);
-    const timerPill = document.getElementById('timerPill');
-    if (appState.useTimer) {
-      timerPill.style.display = 'flex';
-      timeLeft = 20;
-      document.getElementById('timerText').textContent = timeLeft;
-      timerInterval = setInterval(() => {
-        timeLeft--;
-        document.getElementById('timerText').textContent = timeLeft;
-        if (timeLeft <= 0) {
-          clearInterval(timerInterval);
-          showHint(q.hint);
+    clearInterval(timerId);
+    const tWrap = document.getElementById('arenaTimerWrap');
+    if (store.useTimer) {
+      tWrap.style.display = 'flex';
+      secLeft = 20;
+      document.getElementById('arenaTimer').textContent = secLeft;
+      timerId = setInterval(() => {
+        secLeft--;
+        document.getElementById('arenaTimer').textContent = secLeft;
+        if (secLeft <= 0) {
+          clearInterval(timerId);
+          giveTip(q.hint);
         }
       }, 1000);
     } else {
-      timerPill.style.display = 'none';
+      tWrap.style.display = 'none';
     }
   }
 
-  function recordTopicStat(topic, isCorrect) {
-    if (!appState.stats[topic]) appState.stats[topic] = { total: 0, correct: 0 };
-    appState.stats[topic].total += 1;
-    if (isCorrect) appState.stats[topic].correct += 1;
-    saveState();
+  function logStat(topic, ok) {
+    const p = currentProfile();
+    if (!p.stats[topic]) p.stats[topic] = { asked: 0, right: 0 };
+    p.stats[topic].asked += 1;
+    if (ok) {
+      p.stats[topic].right += 1;
+      p.totalCorrect += 1;
+    }
   }
 
-  function handleAnswer(btn, selected, q) {
-    if (selected === q.correct) {
-      clearInterval(timerInterval);
-      sfxCorrect();
-      btn.classList.add('correct');
-      document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+  function pickChoice(btn, val, q) {
+    const p = currentProfile();
+    const mascot = document.getElementById('arenaMascot');
 
-      if (wrongAttempts === 0) {
-        sessionCorrect++;
-        recordTopicStat(q.topic, true);
+    if (val === q.ans) {
+      clearInterval(timerId);
+      sfxRight();
+      btn.classList.add('right');
+      document.querySelectorAll('.choice-btn').forEach(x => x.disabled = true);
+      mascot.classList.add('happy');
+
+      const firstTry = attemptsOnQ === 0;
+      if (firstTry) {
+        qRightCount++;
+        p.combo += 1;
       } else {
-        recordTopicStat(q.topic, false);
+        p.combo = 0;
       }
+      logStat(q.topic, firstTry);
+      saveStore();
 
-      const fb = document.getElementById('feedbackBanner');
-      fb.className = 'feedback-banner success';
+      document.getElementById('arenaSpeech').textContent = 'Keren! Jawabanmu tepat!';
+      const fb = document.getElementById('arenaFeedback');
+      fb.className = 'feedback-bar ok';
       fb.style.display = 'flex';
-      document.getElementById('feedbackText').textContent = '🎉 Hebat! Jawabanmu tepat sekali!';
+      document.getElementById('arenaFeedbackMsg').textContent = `🎉 Benar! Combo saat ini: ${p.combo}x`;
     } else {
       sfxWrong();
-      wrongAttempts++;
+      attemptsOnQ++;
+      p.combo = 0;
+      if (hearts > 1) hearts--;
+      document.getElementById('arenaHearts').textContent = hearts;
+      mascot.classList.add('sad');
       btn.classList.add('wrong');
       btn.disabled = true;
-      showHint(q.hint);
+      saveStore();
+      giveTip(q.hint);
     }
   }
 
-  function showHint(hintText) {
-    const fb = document.getElementById('feedbackBanner');
-    fb.className = 'feedback-banner hint';
+  function giveTip(text) {
+    document.getElementById('arenaSpeech').textContent = 'Coba perhatikan petunjuknya ya!';
+    const fb = document.getElementById('arenaFeedback');
+    fb.className = 'feedback-bar tip';
     fb.style.display = 'flex';
-    document.getElementById('feedbackText').textContent = `💡 Petunjuk: ${hintText}`;
+    document.getElementById('arenaFeedbackMsg').textContent = `💡 ${text}`;
   }
 
-  function nextQuestion() {
-    sfxClick();
-    qIndex++;
-    if (qIndex < 10) {
-      renderQuestion();
-    } else {
-      finishSession();
+  function advanceQuestion() {
+    sfxTap();
+    qPos++;
+    if (qPos < 10) drawQuestion();
+    else endZone();
+  }
+
+  function endZone() {
+    clearInterval(timerId);
+    sfxFanfare();
+    document.getElementById('arenaProgress').style.width = '100%';
+
+    const p = currentProfile();
+    const starsGot = qRightCount >= 8 ? 3 : (qRightCount >= 5 ? 2 : 1);
+    const coinsGot = qRightCount * 6 + 10;
+
+    const prev = p.zoneStars[activeZone.id] || 0;
+    if (starsGot > prev) {
+      p.stars += (starsGot - prev);
+      p.zoneStars[activeZone.id] = starsGot;
     }
+    p.coins += coinsGot;
+    saveStore();
+
+    document.getElementById('finishStars').textContent = starsGot;
+    document.getElementById('finishCoins').textContent = coinsGot;
+    document.getElementById('finishDetail').textContent = `Benar ${qRightCount} dari 10 soal di ${activeZone.title}.`;
+    goScreen('screenFinish');
   }
 
-  function finishSession() {
-    clearInterval(timerInterval);
-    sfxWin();
-    document.getElementById('gameProgressBar').style.width = '100%';
-
-    const earnedStars = sessionCorrect >= 8 ? 3 : (sessionCorrect >= 5 ? 2 : 1);
-    const earnedCoins = sessionCorrect * 5 + 5;
-
-    appState.stars += earnedStars;
-    appState.coins += earnedCoins;
-    saveState();
-
-    document.getElementById('earnedStars').textContent = earnedStars;
-    document.getElementById('earnedCoins').textContent = earnedCoins;
-    document.getElementById('resultSubtitle').textContent = `Kamu menjawab benar ${sessionCorrect} dari 10 soal di ${currentMode.title}!`;
-
-    showScreen('screenResult');
-  }
-
-  function speakCurrentQuestion() {
+  function readAloud() {
     if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
-    const q = sessionQuestions[qIndex];
-    const utter = new SpeechSynthesisUtterance(q.speak || q.text);
-    utter.lang = 'id-ID';
-    utter.rate = 0.92;
-    window.speechSynthesis.speak(utter);
+    const q = qList[qPos];
+    const u = new SpeechSynthesisUtterance(q.say || q.prompt);
+    u.lang = 'id-ID';
+    u.rate = 0.92;
+    window.speechSynthesis.speak(u);
   }
 
   /* ================= SHOP ================= */
   function renderShop() {
-    const grid = document.getElementById('shopGrid');
+    const p = currentProfile();
+    const grid = document.getElementById('shopCardsGrid');
     grid.innerHTML = '';
-    MASCOTS.forEach(m => {
-      const owned = appState.ownedMascots.includes(m.id);
-      const equipped = appState.equippedMascot === m.icon;
 
-      const card = document.createElement('div');
-      card.className = `shop-item ${owned ? 'owned' : ''} ${equipped ? 'equipped' : ''}`;
-      card.innerHTML = `
-        <div style="font-size: 3rem;">${m.icon}</div>
-        <div style="font-weight: 700; margin: 6px 0;">${m.name}</div>
-        <button class="btn ${equipped ? 'btn-success' : (owned ? 'btn-secondary' : 'btn-warning')}" 
-                style="padding: 8px 12px; font-size: 0.9rem; width: 100%;">
-          ${equipped ? 'Dipakai ✔' : (owned ? 'Pakai' : `🪙 ${m.price}`)}
+    CHARACTERS.forEach(c => {
+      const has = p.ownedChars.includes(c.id);
+      const used = p.character === c.icon;
+      const el = document.createElement('div');
+      el.className = `item-card ${has ? 'owned' : ''} ${used ? 'equipped' : ''}`;
+      el.innerHTML = `
+        <div style="font-size:2.9rem;">${c.icon}</div>
+        <div style="font-weight:700; margin:6px 0;">${c.name}</div>
+        <button class="btn ${used ? 'btn-success' : (has ? 'btn-secondary' : 'btn-gold')}" style="width:100%; padding:8px; font-size:0.9rem;">
+          ${used ? 'Dipakai ✔' : (has ? 'Pakai' : `🪙 ${c.cost}`)}
         </button>
       `;
-      card.querySelector('button').onclick = () => handleShopAction(m);
-      grid.appendChild(card);
+      el.querySelector('button').onclick = () => {
+        if (has) {
+          sfxTap(); p.character = c.icon; saveStore(); renderShop();
+        } else if (p.coins >= c.cost) {
+          sfxFanfare(); p.coins -= c.cost; p.ownedChars.push(c.id); p.character = c.icon; saveStore(); renderShop();
+        } else {
+          sfxWrong(); alert('Koin belum cukup. Ayo mainkan pos petualangan dulu!');
+        }
+      };
+      grid.appendChild(el);
     });
-  }
-
-  function handleShopAction(m) {
-    if (appState.ownedMascots.includes(m.id)) {
-      sfxClick();
-      appState.equippedMascot = m.icon;
-      saveState();
-      renderShop();
-    } else if (appState.coins >= m.price) {
-      sfxWin();
-      appState.coins -= m.price;
-      appState.ownedMascots.push(m.id);
-      appState.equippedMascot = m.icon;
-      saveState();
-      renderShop();
-    } else {
-      sfxWrong();
-      alert('Koin belum cukup! Ayo mainkan game untuk mengumpulkan lebih banyak koin.');
-    }
   }
 
   /* ================= CERTIFICATE ================= */
-  function renderCertificate() {
-    document.getElementById('certChildName').textContent = appState.childName;
-    document.getElementById('certStars').textContent = appState.stars;
-    let totalCorrect = 0;
-    Object.values(appState.stats).forEach(s => totalCorrect += s.correct);
-    document.getElementById('certCorrect').textContent = totalCorrect;
-
-    const today = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-    document.getElementById('certDate').textContent = `Diterbitkan pada: ${today}`;
+  function renderCert() {
+    const p = currentProfile();
+    document.getElementById('certName').textContent = p.name;
+    document.getElementById('certStarVal').textContent = p.stars;
+    document.getElementById('certCorrectVal').textContent = p.totalCorrect;
+    document.getElementById('certDateVal').textContent = 'Tanggal: ' + new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
   }
 
-  /* ================= PARENT GATE & DASHBOARD ================= */
-  let gateExpected = 42;
-
+  /* ================= PARENT GATE & REPORT ================= */
+  let gateAns = 48;
   function openParentGate() {
-    sfxClick();
-    const a = rand(12, 19), b = rand(3, 6);
-    gateExpected = a * b;
-    document.getElementById('gateQuestion').textContent = `${a} × ${b} = ?`;
-    document.getElementById('gateAnswerInput').value = '';
-    document.getElementById('parentGateModal').classList.add('active');
+    sfxTap();
+    const a = rnd(11, 18), b = rnd(3, 6);
+    gateAns = a * b;
+    document.getElementById('gateMath').textContent = `${a} × ${b} = ?`;
+    document.getElementById('gateInput').value = '';
+    document.getElementById('gateModal').classList.add('open');
   }
-
-  function closeParentGate() {
-    document.getElementById('parentGateModal').classList.remove('active');
-  }
-
-  function verifyParentGate() {
-    const val = parseInt(document.getElementById('gateAnswerInput').value, 10);
-    if (val === gateExpected) {
-      closeParentGate();
-      showScreen('screenParent');
+  function closeGate() { document.getElementById('gateModal').classList.remove('open'); }
+  function checkGate() {
+    if (parseInt(document.getElementById('gateInput').value, 10) === gateAns) {
+      closeGate();
+      goScreen('screenParent');
     } else {
       sfxWrong();
-      alert('Jawaban verifikasi salah. Silakan coba lagi.');
+      alert('Jawaban salah, coba lagi.');
     }
   }
-
-  function toggleTimerSetting() {
-    appState.useTimer = document.getElementById('timerSettingCheckbox').checked;
-    saveState();
+  function updateTimerPref() {
+    store.useTimer = document.getElementById('chkTimer').checked;
+    saveStore();
   }
-
-  function renderParentDashboard() {
-    document.getElementById('timerSettingCheckbox').checked = appState.useTimer;
-    const tbody = document.getElementById('parentStatsBody');
-    tbody.innerHTML = '';
-
-    const entries = Object.entries(appState.stats);
-    if (entries.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#868e96;">Belum ada data latihan soal.</td></tr>`;
+  function renderParent() {
+    document.getElementById('chkTimer').checked = store.useTimer;
+    const p = currentProfile();
+    const list = document.getElementById('parentReportList');
+    const entries = Object.entries(p.stats);
+    if (!entries.length) {
+      list.innerHTML = `<div style="background:#fff; padding:16px; border-radius:16px; text-align:center; color:var(--muted);">Belum ada riwayat soal untuk <strong>${p.name}</strong>.</div>`;
       return;
     }
-
-    let weakestTopic = null;
-    let lowestAcc = 101;
-
-    entries.forEach(([topic, data]) => {
-      const acc = Math.round((data.correct / data.total) * 100);
-      if (acc < lowestAcc) {
-        lowestAcc = acc;
-        weakestTopic = topic;
-      }
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td><strong>${topic}</strong></td>
-        <td>${data.total}</td>
-        <td>${data.correct}</td>
-        <td><span class="pill" style="background:${acc >= 75 ? '#d3f9d8' : '#fff3bf'}">${acc}%</span></td>
-      `;
-      tbody.appendChild(tr);
-    });
-
-    if (weakestTopic && lowestAcc < 80) {
-      document.getElementById('parentAdviceText').textContent =
-        `Ananda sudah berlatih dengan baik! Topik "${weakestTopic}" (akurasi ${lowestAcc}%) bisa diulang bersama secara santai menggunakan alat bantu visual di dalam game.`;
-    } else {
-      document.getElementById('parentAdviceText').textContent =
-        `Luar biasa! Pemahaman Ananda sangat merata di semua topik yang sudah dimainkan. Silakan naikkan tantangan ke jenjang atau mode berikutnya.`;
+    list.innerHTML = entries.map(([topic, s]) => {
+      const pct = Math.round((s.right / s.asked) * 100);
+      return `<div style="background:#fff; border:2px solid #e2e8f0; border-radius:16px; padding:12px 14px; display:flex; justify-content:space-between; align-items:center;">
+        <div><strong>${topic}</strong><div style="font-size:0.85rem; color:var(--muted);">Benar ${s.right} dari ${s.asked} soal</div></div>
+        <span class="meter" style="background:${pct >= 75 ? '#dcfce7' : '#fef9c3'};">${pct}%</span>
+      </div>`;
+    }).join('');
+  }
+  function resetActiveProfile() {
+    if (confirm(`Reset progres untuk ${currentProfile().name}?`)) {
+      const nm = currentProfile().name;
+      store.profiles[store.activeIdx] = freshProfile(nm);
+      saveStore();
+      renderParent();
     }
   }
 
-  function resetAllProgress() {
-    if (confirm('Yakin ingin menghapus semua koin, bintang, dan riwayat belajar?')) {
-      localStorage.removeItem('pulauAngkaState');
-      appState = JSON.parse(JSON.stringify(defaultState));
-      saveState();
-      renderParentDashboard();
-    }
-  }
-
-  // Init
-  updateHeaderUI();
+  refreshHud();
+  renderMap();
 </script>
 </body>
 </html>
